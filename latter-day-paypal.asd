@@ -10,6 +10,10 @@
   :depends-on (#:closer-mop
                #:str 
                #:jonathan
-               #:dexador)
+               #:dexador
+               #:local-time)
   :components ((:file "package")
+               (:file "conditions")
+               (:file "response")
+               (:file "token")
                (:file "latter-day-paypal")))
