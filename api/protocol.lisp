@@ -27,10 +27,7 @@
     :initarg :query-slot-names)
    (query-constructor
     :accessor query-constructor
-    :initarg :query-constructor)
-   (headers
-    :accessor headers
-    :initarg :headers)))
+    :initarg :query-constructor)))
 
 
 (defclass api-slot-direct (api-slot c2mop:standard-direct-slot-definition)
@@ -178,7 +175,7 @@
                 (list intern :accessor intern :initarg key)))
             slots)))
 
-(defmacro defapi (name (endpoint super) query-slots &key (headers nil))
+(defmacro defapi (name (endpoint super) query-slots)
   (let* ((slots (slots-from-url endpoint))
          (names (mapcar #'first slots))
          (query-slot-names (mapcar #'first query-slots)))
@@ -188,21 +185,13 @@
                ,@(append `((:metaclass api-call)
                            (:genned-slot-names ,names)
                            (:query-slot-names ,query-slot-names)
-                           (:endpoint ,endpoint)
-                           (:headers ,headers))))))
+                           (:endpoint ,endpoint))))))
        (c2mop:ensure-finalized class)
        (with-slots (string-constructor headers query-constructor)
            class
          (setf (string-constructor class) (gen-url-generator class))
          (when ',query-slots
-           (setf (query-constructor class) (gen-query-generator class)))
-         ,(when headers 
-            `(defmethod generate-headers append ((req ,name))
-               (declare (special ,@headers))
-               (append ,@(mapcar (lambda (special)
-                                   `(when (boundp ',special)
-                                      ,special))
-                                 headers))))))))
+           (setf (query-constructor class) (gen-query-generator class)))))))
 
 (c2mop:define-method-combination string-gen (&optional (order ':most-specific-last))
   ((around (:around))
@@ -254,6 +243,11 @@
 (defmethod generate-headers append (req)
   `(("Content-Type" . "application/json")
     ("Authorization" . ,(format nil "Bearer ~A" (access-token *token*)))))
+
+(defmethod generate-headers append ((req request))
+  (declare (special *request-headers*))
+  (when (boundp '*request-headers*)
+    *request-headers*))
 
 (defmethod generate-content (req)
   nil)
