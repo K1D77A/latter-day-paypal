@@ -306,6 +306,156 @@
         ())
 
 
+;;;orders
+
+(defapi orders%create ("/v2/checkout/orders" post-r)
+        ());;has the request-id partner-att client-metadata and prefer headers if wanted
+
+(defapi orders%update ("/v2/checkout/orders/:order-id" patch-r)
+        ())
+
+(defapi orders%details ("/v2/checkout/orders/:order-id" get-r)
+        ((fields
+          :accessor fields
+          :initarg :fields)))
+
+(defapi orders%authorize ("/v2/checkout/orders/:order-id/authorize" post-r)
+        ());;has the request-id metadata prefer auth-assertion
+
+
+(defapi orders%capture ("/v2/checkout/orders/:order-id/capture" post-r)
+        ());;has the request-id prefer metadata auth-assertion
+
+
+;;;partner referrals
+
+(defapi partner%create ("/v2/customer/partner-referrals" post-r)
+        ())
+
+(defapi partner%get-data ("/v2/customer/partner-referrals/:referral-id" get-r)
+        ())
+
+
+;;;payment-experience
+
+(defapi web-profiles%list ("/v1/payment-experience/web-profiles" get-r)
+        ())
+
+(defapi web-profiles%create ("/v1/payment-experience/web-profiles" post-r)
+        ());;has request-id
+
+(defapi web-profiles%delete ("/v1/payment-experience/web-profiles/:profile-id" delete-r)
+        ())
+
+(defapi web-profiles%update ("/v1/payment-experience/web-profiles/:profile-id" patch-r)
+        ())
+
+(defapi web-profiles%partial-update
+    ("/v1/payment-experience/web-profiles/:profile-id" patch-r)
+    ())
+
+(defapi web-profiles%details
+    ("/v1/payment-experience/web-profiles/:profile-id" get-r)
+    ())
+
+;;;payments
+
+(defapi payments-authorization%details
+    ("/v2/payments/authorizations/:authorization-id" get-r)
+    ())
+
+(defapi payments-authorization%capture
+    ("/v2/payments/authorizations/:authorization-id/capture" post-r)
+    ());;has request id and prefer
+
+(defapi payments-authorization%reauthorize
+    ("/v2/payments/authorizations/:authorization-id/reauthorize" post-r)
+    ());;has request id and prefer
+
+(defapi payments-authorization%void
+    ("/v2/payments/authorizations/:authorization-id/void" post-r)
+    ());;has auth assertion
+
+(defapi payments-captures%details
+    ("/v2/payments/captures/:capture-id" get-r)
+    ());;has auth assertion
+
+(defapi payments-captures%refund
+    ("/v2/payments/captures/:capture-id/refund" post-r)
+    ());;has request-id prefer auth-assertion
+
+(defapi payments-refunds%details
+    ("/v2/payments/refunds/:refund-id" get-r)
+    ())
+
+;;;payouts
+
+(defapi payouts-batch%create
+    ("/v1/payments/payouts" post-r)
+    ());has request-id
+
+(defapi payouts-batch%details
+    ("/v1/payments/payouts/:batch-id" get-r)
+    ((page_size
+      :accessor page-size
+      :initarg :page-size)
+     (page
+      :accessor page
+      :initarg :page)
+     (fields
+      :accessor fields
+      :initarg :fields)
+     (total_required
+      :accessor total-required
+      :initarg :total-required)))
+
+(defapi payouts-item%details
+    ("/v1/payments/payouts-item/:payout-id" get-r)
+    ())
+
+(defapi payouts-item%cancel-unclaimed
+    ("/v1/payments/payouts-item/:payout-id/cancel" post-r)
+    ())
+
+;;;reference payouts
+
+(defapi referenced-payouts-batch%create
+    ("/v1/payments/referenced-payouts" post-r)
+    ());has partner-attribution request-id prefer 
+
+(defapi referenced-payouts-batch%details
+    ("/v1/payments/referenced-payouts/:batch-id" get-r)
+    ((page_size
+      :accessor page-size
+      :initarg :page-size)
+     (page
+      :accessor page
+      :initarg :page)
+     (fields
+      :accessor fields
+      :initarg :fields)
+     (total_required
+      :accessor total-required
+      :initarg :total-required)))
+
+(defapi referenced-payouts-item%create
+    ("/v1/payments/referenced-payouts-items" post-r)
+    ());;partner-attribution request-id prefer
+
+(defapi referenced-payouts-item%cancel-unclaimed
+    ("/v1/payments/referenced-payouts-items/:payout-id" get-r)
+    ());;has partner-attribution
+
+
+
+
+
+
+
+
+
+
+
 
 
 
