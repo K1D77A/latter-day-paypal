@@ -42,13 +42,14 @@
 (define-condition server-error (failed-request)
   ())
 
+
 (defmacro quick-api-condition (name (super status-code status-text))
   `(progn (define-condition ,name (,super)
             ((status-code :initform ,status-code)
              (status-text :initform ,status-text)))))
 
 (defmacro qc (name (super status-code status-text))
-  `(quick-unauthorized ,name (,super ,status-code ,status-text)))
+  `(quick-api-condition ,name (,super ,status-code ,status-text)))
 
 (qc four-hundred (authorization-error 400 "Bad Request"))
 
@@ -85,6 +86,11 @@
     (429 'four-hundred-twenty-nine)
     (500 'five-hundred)
     (503 'five-hundred-three)))
+
+(defmacro wrapped-dex-call ((resp status) &body body)
+  `(wrap-dex-condition 
+     (multiple-value-bind (,resp ,status)
+         ,@body)))
 
 (defmacro wrap-dex-condition (&body body)
   `(handler-case

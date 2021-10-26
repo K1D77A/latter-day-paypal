@@ -2,7 +2,9 @@
 
 (defparameter *token* nil)
 
+(defparameter *client* "ATiiZbWBH3_qd_y3P3AZQiQlBIh9mVTDSTtr4ALOPqfTd5eBZooqeJlLT0o6-HLF95_Vj2GADaIhp5Ee")
 
+(defparameter *secret* "EMBuo5-J3kWfSEJYY5mtQd8Hm9JezbxjkUUJ2D9JwKwwas1E05Ejp4A1wlpNuuFd3YyIoKZrSxjs9OUb")
 
 (defclass token ()
   ((nonce
@@ -37,7 +39,8 @@
 
 (defun get-token ()
   (wrapped-dex-call (resp status)
-    (dex:post (format nil "~A/v1/oauth2/tokenddd" *api*)
+    (dex:post (format nil "~A/v1/oauth2/token"
+                      (generate-url t))
               :basic-auth `(,*client* . ,*secret*)
               :headers '(("Accept" . "application/json")
                          ("Accept-Language" . "en_US"))
@@ -48,10 +51,6 @@
        (make-instance (determine-good-class status) :body token)
        (setf *token* token)))))
 
-(defmacro wrapped-dex-call ((resp status) &body body)
-  `(wrap-dex-condition 
-     (multiple-value-bind (,resp ,status)
-         ,@body)))
 
 (defmethod expiredp ((token token))
   "Checks to see if the token has expired."
@@ -59,6 +58,10 @@
       token 
     (let* ((now (local-time:now)))
       (local-time:timestamp<= expires-in now))))
+
+(defun is-token-non-nil ()
+  (unless *token*
+    (error 'unbound-token)))
 
 (defmethod is-expired-token ((token token))
   (when (expiredp token)
