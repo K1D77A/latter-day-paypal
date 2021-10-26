@@ -51,18 +51,10 @@
   (find-class 'api-slot-direct))
 
 (defclass request ()
-  (;; (paypal-auth-assertion
-   ;;  :accessor paypal-auth-assertion
-   ;;  :initarg :paypal-auth-assertion)
-   ;; (paypal-client-metadata-id
-   ;;  :accessor paypal-client-metadata-id
-   ;;  :initarg :paypal-client-metadata-id)
-   ;; (paypal-partner-attribution-id
-   ;;  :accessor paypal-partner-attribution-id
-   ;;  :initarg :paypal-partner-attribution-id)
-   ;; (paypal-request-id
-   ;;  :accessor paypal-request-id
-   ;;  :initarg :paypal-request-id)
+  ((content-type
+    :reader content-type
+    :initarg :content-type
+    :initform "application/json")
    (request-fun
     :reader request-fun
     :initarg :request-fun
@@ -107,12 +99,25 @@
   ((request-fun :initform 'dex:post))
   (:metaclass api-call))
 
-(defclass post-files-request (post)
+(defclass query-req-content (request-with-content)
   ()
+  (:metaclass api-call))
+
+(defclass post-query-r (query-req-content post-r)
+  ()
+  (:metaclass api-call))
+
+(defclass post-files-r (post-r)
+  ((content-type
+    :initform "multipart/related"))
   (:metaclass api-call))
 
 (defclass put-r (request-with-content)
   ((request-fun :initform 'dex:put))
+  (:metaclass api-call))
+
+(defclass put-query-r (query-req-content put-r)
+  ()
   (:metaclass api-call))
 
 (defun in-list (obj)
@@ -154,15 +159,24 @@
   (with-accessors ((query-slot-names query-slot-names))
       class 
     (let* ((slots (in-list query-slot-names)))
-      (compile nil
-               `(lambda (request)
-                  (format nil "?~{~A~^&~}"
-                          (loop :for slot :in ',slots
-                                :if (slot-boundp request slot)
-                                  :collect (format nil "~A=~A"
-                                                   (string-downcase (symbol-name slot))
-                                                   (do-urlencode:urlencode
-                                                    (slot-value request slot))))))))))
+      (if slots 
+          (compile nil
+                   `(lambda (request)
+                      (let ((str
+                              (format nil "?~{~A~^&~}"
+                                      (loop :for slot :in ',slots
+                                            :if (slot-boundp request slot)
+                                              :collect
+                                              (format nil "~A=~A"
+                                                      (string-downcase (symbol-name slot))
+                                                      (do-urlencode:urlencode
+                                                       (slot-value request slot)))))))
+                        (if (string= str "?")
+                            ""
+                            str))))
+          (lambda (req)
+            (declare (ignore req))
+            "")))))
 
 (defun slots-from-url (url)
   (let* ((split (str:split #\/ url :omit-nulls t))
@@ -225,6 +239,9 @@
 (defmethod generate-url string-gen ((req query-req))
   (funcall (in-list (query-constructor (class-of req))) req))
 
+(defmethod generate-url string-gen ((req query-req-content))
+  (funcall (in-list (query-constructor (class-of req))) req))
+
 (defmethod extra-headers (req)
   nil)
 
@@ -240,8 +257,14 @@
   (is-expired-token *token*)
   `(:headers ,(call-next-method)))
 
+(defmethod content-type (req)
+  "application/json")
+
+(defmethod content-type ((req request))
+  (slot-value req 'content-type))
+
 (defmethod generate-headers append (req)
-  `(("Content-Type" . "application/json")
+  `(("Content-Type" . ,(content-type req))
     ("Authorization" . ,(format nil "Bearer ~A" (access-token *token*)))))
 
 (defmethod generate-headers append ((req request))
@@ -257,6 +280,9 @@
 
 (defmethod generate-content ((req patch-r))
   `(:content ,(cl-json:encode-json-to-string (slot-value req 'patch-request))))
+
+(defmethod generate-content ((req post-files-r))
+  `(:content ,(slot-value req 'content)))
 
 (defmethod generate-dex-list (req)
   (append (generate-headers req) (generate-content req)))
