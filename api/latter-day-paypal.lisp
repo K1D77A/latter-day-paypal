@@ -446,6 +446,187 @@
     ("/v1/payments/referenced-payouts-items/:payout-id" get-r)
     ());;has partner-attribution
 
+;;;subscriptions
+(defapi subscribe-plans%list ("/v1/billing/plans" get-r)
+        ((page_size
+          :accessor page-size
+          :initarg :page-size)
+         (page
+          :accessor page
+          :initarg :page)
+         (product_id
+          :accessor product-id
+          :initarg :product-id)
+         (plan_ids 
+          :accessor plan-ids 
+          :initarg :plan-ids)
+         (total_required
+          :accessor total-required
+          :initarg :total-required)))
+
+(defapi subscribtions-plans%create ("/v1/billing/plans" post-r)
+        ());;has prefer request-id
+
+(defapi subscribtions-plans%update ("/v1/billing/plans/:plan-id" patch-r)
+        ())
+
+(defapi subscribtions-plans%details ("/v1/billing/plans/:plan-id" get-r)
+        ())
+
+(defapi subscribtions-plans%activate ("/v1/billing/plans/:plan-id/activate" post-r)
+        ())
+
+(defapi subscribtions-plans%deactivate ("/v1/billing/plans/:plan-id/deactivate" post-r)
+        ())
+
+(defapi subscribtions-plans%update-pricing-schemas
+    ("/v1/billing/plans/:plan-id/update-pricing-schemas" post-r)
+    ())
+
+(defapi subscriptions%create ("/v1/billing/subscriptions" post-r)
+        ());has prefer
+
+(defapi subscriptions%update ("/v1/billing/subscriptions/:sub-id" patch-r)
+        ())
+
+(defapi subscriptions%details ("/v1/billing/subscriptions/:sub-id" get-r)
+        ())
+
+(defapi subscriptions%activate ("/v1/billing/subscriptions/:sub-id/activate" post-r)
+        ())
+
+(defapi subscriptions%cancel ("/v1/billing/subscriptions/:sub-id/activate" post-r)
+        ())
+
+(defapi subscriptions%capture ("/v1/billing/subscriptions/:sub-id/capture" post-r)
+        ())
+
+(defapi subscriptions%revise ("/v1/billing/subscriptions/:sub-id/revise" post-r)
+        ())
+
+(defapi subscriptions%suspend ("/v1/billing/subscriptions/:sub-id/suspend" post-r)
+        ())
+
+(defapi subscriptions%transactions ("/v1/billing/subscriptions/:sub-id/transactions"
+                                    post-r)
+        ((start_time
+          :accessor start-time 
+          :initarg :start-time)
+         (end_time 
+          :accessor end-time 
+          :initarg :end-time)))
+
+;;;search
+(defapi search-transactions%list ("/v1/reporting/transactions" get-r)
+        ((transaction_id
+          :accessor transaction-id
+          :initarg :transaction-id)
+         (transaction_type
+          :accessor transaction-type
+          :initarg :transaction-type)
+         (transaction_status
+          :accessor transaction-status
+          :initarg :transaction-status)
+         (transaction_amount
+          :accessor transaction-amount
+          :initarg :transaction-amount)
+         (transaction_currency
+          :accessor transaction-currency
+          :initarg :transaction-currency)
+         (start_date
+          :accessor start-date 
+          :initarg :start-date)
+         (end_date
+          :accessor end-date 
+          :initarg :end-date)
+         (payment_instrument_type
+          :accessor payment-instrument-type
+          :initarg :payment-instrument-type)
+         (store_id 
+          :accessor store-id
+          :initarg :store-id)
+         (terminal_id
+          :accessor terminal-id 
+          :initarg :terminal-id)
+         (fields
+          :accessor fields
+          :initarg :fields)
+         (balance_affecting_records_only
+          :accessor balance-affecting-records-only
+          :initarg :balance-affecting-records-only)
+         (page_size 
+          :accessor page-size 
+          :initarg :page-size)
+         (page
+          :accessor page
+          :initarg :page)))
+
+(defapi search-balances%list ("/v1/reporting/balances" get-r)
+        ((as_of_time
+          :accessor as-of-time
+          :initarg :as-of-time)
+         (currency_code
+          :accessor currency-code
+          :initarg :currency-code)))
+
+
+;;;webhooks
+(defapi webhooks%list ("/v1/notifications/webhooks" get-r)
+        ((anchor_time
+          :accessor anchor-time
+          :initarg :anchor-time)))
+
+(defapi webhooks%create ("/v1/notifications/webhooks" post-r)
+        ())
+
+(defapi webhooks%delete ("/v1/notifications/webhooks/:webhook-id" delete-r)
+        ())
+
+(defapi webhooks%update ("/v1/notifications/webhooks/:webhook-id" patch-r)
+        ())
+
+(defapi webhooks%details ("/v1/notifications/webhooks/:webhook-id" get-r)
+        ())
+
+(defapi webhooks%list-event-subscriptions
+    ("/v1/notifications/webhooks/:webhook-id/event-types" get-r)
+    ())
+
+(defapi webhooks%verify-signature ("/v1/notifications/verify-webhook-signature" post-r)
+        ())
+
+(defapi webhooks%list-event-types ("/v1/notifications/webhooks-event-types" get-r)
+        ())
+
+(defapi webhooks%list-event-notifications ("/v1/notifications/webhooks-events" get-r)
+        ((page_size
+          :accessor page-size
+          :initarg :page-size)
+         (transaction_id
+          :accessor transaction-id
+          :initarg :transaction-id)
+         (event_type
+          :accessor event-type
+          :initarg :event-type)
+         (start_time
+          :accessor start-time 
+          :initarg :start-time)
+         (end_time 
+          :accessor end-time 
+          :initarg :end-time)))
+
+(defapi webhooks%notification-details ("/v1/notifications/webhooks-events/:event-id"
+                                       get-r)
+        ())
+
+(defapi webhooks%resend-event ("/v1/notifications/webhooks-events/:event-id/resend"
+                               post-r)
+        ())
+
+(defapi webhooks%simulate-event ("/v1/notifications/simulate-event"
+                                 post-r)
+        ())
+
 
 
 
