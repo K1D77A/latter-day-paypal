@@ -242,12 +242,6 @@
 (defmethod generate-url string-gen ((req query-req-content))
   (funcall (in-list (query-constructor (class-of req))) req))
 
-(defmethod extra-headers (req)
-  nil)
-
-(defmethod extra-headers ((req request))
-  (in-list (slot-value (class-of req) 'headers)))
-
 (defgeneric generate-headers (req)
   (:method-combination append :most-specific-last))
 

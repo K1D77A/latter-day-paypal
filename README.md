@@ -78,6 +78,27 @@ Body: NIL {10040F0083}>
 LDP> 
 ```
 
+## Adding headers
+
+Some calls accept other headers like Paypal-Request-Id to add these headers to a request lexically bind the variable `*extra-headers*`
+
+```lisp
+#<PRODUCTS%LIST {101130BC0B}>
+LDP> (let ((*request-headers* '(("Paypal-Auth-Assertion" . "imauthassertion"))))
+       (declare (special *request-headers*))
+       <request> 
+       <call-api>)
+```
+Headers are send using Dex so they have to be a properly formed alist like above.
+You can see the additional headers in the paypal dev docs.
+
+## Testing 
+By default the API URL used is the sandbox url, to go live set `*testing*` to non nil.
+```lisp
+LDP> *testing*
+T
+```
+
 ## License
 
 MIT
