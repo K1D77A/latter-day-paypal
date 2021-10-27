@@ -127,6 +127,13 @@ A lot of the requests that update are patch requests which accept objects. When 
 
 Most requests (put/post) have a body, to provide this data use the :content slot. 
 
+## Query parameters
+
+Query parameters are slots within the object, just set them and the ones that are bound will be encoded and added onto the end of the URL.
+
+## Path parameters
+
+Path parameters are slots within the request object, just set the slots and they will be automatically encoded into the URL.
 
 ## License
 
