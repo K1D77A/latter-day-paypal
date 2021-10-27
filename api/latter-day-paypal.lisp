@@ -447,7 +447,7 @@
     ());;has partner-attribution
 
 ;;;subscriptions
-(defapi subscribe-plans%list ("/v1/billing/plans" get-r)
+(defapi subscriptions-plans%list ("/v1/billing/plans" get-r)
         ((page_size
           :accessor page-size
           :initarg :page-size)

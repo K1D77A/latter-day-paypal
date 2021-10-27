@@ -27,7 +27,6 @@
     :reader scope
     :initarg :scope)))
 
-
 (defun token-plist->token (token-plist)
   (destructuring-bind (&key |nonce| |expires_in| |app_id| |token_type| |access_token|
                          |scope| &allow-other-keys)
