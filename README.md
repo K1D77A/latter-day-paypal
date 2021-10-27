@@ -32,6 +32,7 @@ LDP>
 ```
 The result is wrapped in an object with its status code and text and a body slot that 
 contains the result. The same is true if it returns an error.
+The json is decoded using jonathan.
 
 ## Token issues
 If you have failed to set token or it has expired
@@ -89,7 +90,7 @@ LDP> (let ((*request-headers* '(("Paypal-Auth-Assertion" . "imauthassertion"))))
        <request> 
        <call-api>)
 ```
-Headers are send using Dex so they have to be a properly formed alist like above.
+Headers are sent using Dex so they have to be a properly formed alist like above.
 You can see the additional headers in the paypal dev docs.
 
 ## Testing 
