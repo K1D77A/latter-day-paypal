@@ -80,7 +80,7 @@ LDP>
 
 ## Adding headers
 
-Some calls accept other headers like Paypal-Request-Id to add these headers to a request lexically bind the variable `*extra-headers*`
+Some calls accept other headers like Paypal-Request-Id to add these headers to a request lexically bind the variable `*request-headers*`
 
 ```lisp
 #<PRODUCTS%LIST {101130BC0B}>
@@ -98,6 +98,34 @@ By default the API URL used is the sandbox url, to go live set `*testing*` to no
 LDP> *testing*
 T
 ```
+
+## Encoding
+
+All encoding is done with cl-json. So the easiest way to create JSON objects is to use 
+a hash-table. There is a helper function called `%quick-hash` to generate a hash-table from an alist
+```lisp
+LDP> (cl-json:encode-json-to-string (%quick-hash '(("abc" . "def"))))
+"{\"abc\":\"def\"}"
+LDP> 
+```
+Patch requests take an array:
+
+```lisp
+LDP> (make-array 1 :initial-element (%quick-hash '(("abc" . "def"))))
+#(#<HASH-TABLE :TEST EQL :COUNT 1 {100BED8343}>)
+LDP> (cl-json:encode-json-to-string *)
+"[{\"abc\":\"def\"}]"
+LDP> 
+```
+
+## Patch requests
+
+A lot of the requests that update are patch requests which accept objects. When you are using make-instance you will see a slot called 'patch-request, put your request data in this.
+
+## Requests that have a json body
+
+Most requests (put/post) have a body, to provide this data use the :content slot. 
+
 
 ## License
 

@@ -19,5 +19,6 @@
                (:file "protocol")
                (:file "response")
                (:file "token")
-               (:file "latter-day-paypal")))
+               (:file "latter-day-paypal")
+               (:file "helpers")))
 

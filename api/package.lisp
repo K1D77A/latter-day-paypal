@@ -395,5 +395,6 @@
 
            #:webhooks%simulate-event
 
-           
+           ;;helpers
+           #:%quick-hash
            ))
