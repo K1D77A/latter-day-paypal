@@ -6,6 +6,7 @@
   (:export #:paypal-condition
            
            #:token-issue
+           #:missing-token
            
            #:unbound-token
            
