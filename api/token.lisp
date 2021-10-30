@@ -64,7 +64,7 @@
 
 (defmethod is-expired-token ((token token))
   (when (expiredp token)
-    (error 'expired-token token)))
+    (error 'expired-token :token token)))
 
 (defmethod is-token-bound ()
   (unless (boundp '*token*)
