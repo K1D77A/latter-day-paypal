@@ -4,12 +4,14 @@
   :description "Paypal api wrapper."
   :author "K1D77A"
   :license  "MIT"
-  :version "0.0.1"
+  :version "0.0.2"
   :serial t
   :pathname "api"
   :depends-on (#:closer-mop
                #:str 
                #:jonathan
+               #:ironclad
+               #:cl-tls
                #:cl-json
                #:dexador
                #:do-urlencode
@@ -20,5 +22,6 @@
                (:file "response")
                (:file "token")
                (:file "latter-day-paypal")
-               (:file "helpers")))
+               (:file "webhook-verify"
+                      (:file "helpers")))
 

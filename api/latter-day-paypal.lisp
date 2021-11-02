@@ -592,8 +592,8 @@
     ("/v1/notifications/webhooks/:webhook-id/event-types" get-r)
     ())
 
-(defapi webhooks%verify-signature ("/v1/notifications/verify-webhook-signature" post-r)
-        ())
+(defapi webhooks%verify-signature ("/v1/notifications/verify-webhook-signature" post-r%jojo)
+  ())
 
 (defapi webhooks%list-event-types ("/v1/notifications/webhooks-event-types" get-r)
         ())
