@@ -157,6 +157,7 @@ Or you can use
         (let ((plist (jojo:parse (babel:octets-to-string raw-data))))
           (setf (tbnl:return-code*) 200)
           <your processing method> 
+          "t")
         (progn (setf (tbnl:return-code*) 400)
                "nil"))))
 ```
