@@ -19,8 +19,8 @@
 
 (defun %rsa-details->ironclad-rsa (list)
   (destructuring-bind (&key public-exponent modulus)
-                      list
-                      (make-instance 'ironclad:rsa-public-key :e public-exponent :n modulus)))
+      list
+    (make-instance 'ironclad:rsa-public-key :e public-exponent :n modulus)))
 
 (defgeneric cert->public-key (algo cert-url)
   (:documentation "Download the CERT-URL and convert it to the relevant objects for ALGO."))
@@ -50,11 +50,11 @@
                                 :sha256))
 
 (defgeneric verify-webhook (algo cert-url transmission-signature transmission-id
-                                 timestamp webhook-id raw-body)
+                            timestamp webhook-id raw-body)
   (:documentation "Verifies the webhook."))
 
 (defmethod verify-webhook (algo cert-url transmission-signature transmission-id
-                                timestamp webhook-id raw-body)
+                           timestamp webhook-id raw-body)
   (let* ((crc (%crc-event raw-body))
          (key (cert->public-key algo cert-url))
          (message (%generate-signature-bytes
