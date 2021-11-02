@@ -99,13 +99,11 @@
   ((request-fun :initform 'dex:post))
   (:metaclass api-call))
 
-(defclass post-r%jojo (post-r)
+
+
+(defclass query-req-content (request-with-content)
   ()
   (:metaclass api-call))
-
-  (defclass query-req-content (request-with-content)
-    ()
-    (:metaclass api-call))
 
 (defclass post-query-r (query-req-content post-r)
   ()
@@ -281,9 +279,6 @@
 
 (defmethod generate-content ((req post-files-r))
   `(:content ,(slot-value req 'content)))
-
-(defmethod generate-content ((req post-r%jojo))
-  `(:content ,(jojo:to-json (slot-value req 'content))))
 
 (defmethod generate-dex-list (req)
   (append (generate-headers req) (generate-content req)))

@@ -22,6 +22,6 @@
                (:file "response")
                (:file "token")
                (:file "latter-day-paypal")
-               (:file "webhook-verify"
-                      (:file "helpers")))
+               (:file "webhook-verify")
+               (:file "helpers")))
 
