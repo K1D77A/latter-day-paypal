@@ -14,6 +14,7 @@
                #:cl-tls
                #:cl-json
                #:dexador
+               #:cl-base64
                #:do-urlencode
                #:local-time)
   :components ((:file "package")
