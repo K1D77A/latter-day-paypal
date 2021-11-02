@@ -143,7 +143,7 @@ Path parameters are slots within the request object, just set the slots and they
 To verify the signature of a paypal request there are two methods you can use. 
 `(ldp:verify-webhook )` this takes `algo cert-url transmission-signature transmission-id timestamp webhook-id raw-body` algo is a keyword generated with `%algo->key` its simply the string converted to a keyword.
 Or you can use 
-`(ldp:verify-paypal-webhook) which takes `webhook-id request raw-body` this is a method that will dispatch on REQUEST, and currently only works with a hunchentoot request object like so: 
+`(ldp:verify-paypal-webhook)` which takes `webhook-id request raw-body` this is a method that will dispatch on REQUEST, and currently only works with a hunchentoot request object like so: 
 ```lisp
 (hunchentoot:define-easy-handler (paypal-payment-processor
                                   :uri <your webhook url>
