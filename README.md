@@ -151,7 +151,7 @@ Or you can use
     ()
   (let* ((raw-data (tbnl:raw-post-data :force-binary t)))
     (if (ldp:verify-paypal-webhook (if *testing*
-                                       "your testing webhook id" "
+                                       "your testing webhook id"
                                        "Your live webhook id")
                                    tbnl:*request* raw-data)
         (let ((plist (jojo:parse (babel:octets-to-string raw-data))))
