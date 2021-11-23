@@ -15,6 +15,7 @@
                #:cl-json
                #:dexador
                #:cl-base64
+               #:hunchentoot                             
                #:do-urlencode
                #:local-time)
   :components ((:file "package")
