@@ -4,7 +4,7 @@
   (:use #:cl)
   (:nicknames #:ldp)
   (:export #:paypal-condition
-           
+           #:*parse-as*
            #:token-issue
            #:missing-token
            

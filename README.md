@@ -5,6 +5,9 @@ Right now this is just a thin wrapper over the paypal api.
 
 You will need to git clone cl-tls from  https://github.com/shrdlu68/cl-tls and put it into your local-projects, this is for verifying webhooks.
 
+To adjust how jojo parses, set the parameter `*parse-as*` to either :hash-table or :plist,
+by default it is :plist to maintain backwards compatibility. 
+
 ## Intro
 
 To get started you need to set `*client*` and `*secret*` to your client and secret. 

@@ -2,6 +2,8 @@
 
 (defparameter *token* nil)
 
+(defparameter *parse-as* :plist)
+
 (defparameter *client* "ATiiZbWBH3_qd_y3P3AZQiQlBIh9mVTDSTtr4ALOPqfTd5eBZooqeJlLT0o6-HLF95_Vj2GADaIhp5Ee")
 
 (defparameter *secret* "EMBuo5-J3kWfSEJYY5mtQd8Hm9JezbxjkUUJ2D9JwKwwas1E05Ejp4A1wlpNuuFd3YyIoKZrSxjs9OUb")
@@ -27,7 +29,10 @@
     :reader scope
     :initarg :scope)))
 
-(defun token-plist->token (token-plist)
+(defgeneric parse-token (as response)
+  (:documentation "Generically parses RESPONSE into a an instance of 'token using AS"))
+
+(defmethod parse-token ((as (eql :plist)) token-plist)
   (destructuring-bind (&key |nonce| |expires_in| |app_id| |token_type| |access_token|
                          |scope| &allow-other-keys)
       token-plist
@@ -36,7 +41,16 @@
                           (local-time:timestamp+ (local-time:now) |expires_in| :sec)
                           :app-id |app_id| :token-type |token_type|)))
 
+(defmethod parse-token ((as (eql :hash-table)) token-hash)
+  (with-hash-keys (|nonce| |expires_in| |app_id| |token_type| |access_token| |scope|)
+      token-hash 
+    (make-instance 'token :scope |scope| :access-token |access_token|
+                          :nonce |nonce| :expires-in
+                          (local-time:timestamp+ (local-time:now) |expires_in| :sec)
+                          :app-id |app_id| :token-type |token_type|)))
+
 (defun get-token ()
+  (assert (member *parse-as* '(:hash-table :plist)))
   (wrapped-dex-call (resp status)
     (dex:post (format nil "~A/v1/oauth2/token"
                       (generate-url t))
@@ -44,8 +58,7 @@
               :headers '(("Accept" . "application/json")
                          ("Accept-Language" . "en_US"))
               :content '(("grant_type" . "client_credentials")))
-    (let ((token (token-plist->token
-                  (jojo:parse resp))))
+    (let ((token (parse-token *parse-as* (jojo:parse resp :as *parse-as*))))
       (values 
        (make-instance (determine-good-class status) :body token)
        (setf *token* token)))))
