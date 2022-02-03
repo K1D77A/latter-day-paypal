@@ -1,4 +1,3 @@
-
 (in-package #:latter-day-paypal)
 
 (defclass api-slot (c2mop:slot-definition)

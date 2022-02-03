@@ -1,5 +1,7 @@
 (in-package #:latter-day-paypal)
 
+(defparameter *parse-as* :plist)
+
 (define-condition paypal-condition (serious-condition)
   ())
 
@@ -97,7 +99,7 @@
        (locally ,@body)
      (dexador:http-request-failed (c)
        (error (determine-condition (dexador.error:response-status c))
-              :body (jojo:parse (dexador.error:response-body c))))))
+              :body (jojo:parse (dexador.error:response-body c) :as *parse-as*)))))
 
 (defmethod print-object ((obj failed-request) stream)
   (print-unreadable-object (obj stream :type t :identity t)
