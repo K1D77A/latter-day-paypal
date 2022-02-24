@@ -7,10 +7,12 @@
     :type list)
    (status-code
     :accessor status-code
-    :initarg :status-code)
+    :initarg :status-code
+    :type fixnum)
    (status-string
     :accessor status-string
-    :initarg :status-string)))
+    :initarg :status-string
+    :type string)))
 
 (defclass good-response (response)
   ())
