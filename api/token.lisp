@@ -66,6 +66,9 @@
                        (make-instance (determine-good-class status) :body (list token))
                        (setf *token* token)))))
 
+(defmethod expiredp (token)
+  (error 'unbound-token))
+
 (defmethod expiredp ((token token))
   "Checks to see if the token has expired."
   (with-accessors ((expires-in expires-in))
@@ -76,6 +79,9 @@
 (defun is-token-non-nil ()
   (unless *token*
     (error 'unbound-token)))
+
+(defmethod is-expired-token (token)
+  (error 'unbound-token))
 
 (defmethod is-expired-token ((token token))
   (when (expiredp token)
