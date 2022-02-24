@@ -4,7 +4,7 @@
   ((body
     :accessor body
     :initarg :body
-    :type list)
+    :type (or list hash-table));plist or hash for the parse types
    (status-code
     :accessor status-code
     :initarg :status-code
