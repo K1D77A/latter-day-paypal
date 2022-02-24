@@ -61,7 +61,6 @@
        (make-instance (determine-good-class status) :body token)
        (setf *token* token)))))
 
-
 (defmethod expiredp ((token token))
   "Checks to see if the token has expired."
   (with-accessors ((expires-in expires-in))

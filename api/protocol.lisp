@@ -84,7 +84,7 @@
   ((content
     :accessor content
     :initarg :content
-    :type list))
+    :type (or hash-table list)))
   (:metaclass api-call))
 
 (defclass patch-r (request)
