@@ -52,10 +52,12 @@
                           (local-time:timestamp+ (local-time:now) |expires_in| :sec)
                           :app-id |app_id| :token-type |token_type|)))
 
-(defun get-token ()
+(defun get-token (&optional (ignore-checks nil))
   (assert (member *parse-as* '(:hash-table :plist)))
-  (when (or (not (boundp '*token*))
-            (expiredp *token*))
+  (when (or ignore-checks 
+            (or (not (boundp '*token*))
+                (null *token*)
+                (expiredp *token*)))
     (wrapped-dex-call (resp status)
       (dex:post (format nil "~A/v1/oauth2/token"
                         (generate-url t))
