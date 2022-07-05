@@ -8,6 +8,9 @@ You will need to git clone cl-tls from  https://github.com/shrdlu68/cl-tls and p
 To adjust how jojo parses, set the parameter `*parse-as*` to either :hash-table or :plist,
 by default it is :plist to maintain backwards compatibility. 
 
+To adjust the content encoder, set the parameter `*json-encoder*` to a function, by 
+default it is `#'cl-json:encode-json-as-string`. 
+
 ## Intro
 
 To get started you need to set `*client*` and `*secret*` to your client and secret. 

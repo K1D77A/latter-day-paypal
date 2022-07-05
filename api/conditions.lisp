@@ -1,6 +1,7 @@
 (in-package #:latter-day-paypal)
 
 (defparameter *parse-as* :plist)
+(defparameter *json-encoder* #'cl-json:encode-json-to-string)
 
 (define-condition paypal-condition (serious-condition)
   ())

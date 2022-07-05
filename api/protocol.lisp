@@ -271,10 +271,11 @@
   nil)
 
 (defmethod generate-content ((req request-with-content))
-  `(:content ,(cl-json:encode-json-to-string (slot-value req 'content))))
+  (list :content (funcall *json-encoder* (slot-value req 'content))))
+                          
 
 (defmethod generate-content ((req patch-r))
-  `(:content ,(cl-json:encode-json-to-string (slot-value req 'patch-request))))
+  (list :content (funcall *json-encoder* (slot-value req 'patch-request))))
 
 (defmethod generate-content ((req post-files-r))
   `(:content ,(slot-value req 'content)))

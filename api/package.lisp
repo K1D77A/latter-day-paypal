@@ -5,6 +5,7 @@
   (:nicknames #:ldp)
   (:export #:paypal-condition
            #:*parse-as*
+           #:*json-encoder*
            #:token-issue
            #:missing-token
            
