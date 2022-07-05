@@ -54,21 +54,23 @@
 
 (defun get-token (&optional (ignore-checks nil))
   (assert (member *parse-as* '(:hash-table :plist)))
-  (when (or ignore-checks 
-            (or (not (boundp '*token*))
-                (null *token*)
-                (expiredp *token*)))
-    (wrapped-dex-call (resp status)
-      (dex:post (format nil "~A/v1/oauth2/token"
-                        (generate-url t))
-                :basic-auth `(,*client* . ,*secret*)
-                :headers '(("Accept" . "application/json")
-                           ("Accept-Language" . "en_US"))
-                :content '(("grant_type" . "client_credentials")))
-      (let ((token (parse-token *parse-as* (jojo:parse resp :as *parse-as*))))
-        (values 
-         (make-instance (determine-good-class status) :body (list token))
-         (setf *token* token))))))
+  (if (or ignore-checks 
+          (or (not (boundp '*token*))
+              (null *token*)
+              (expiredp *token*)))
+      (wrapped-dex-call
+          (resp status)
+        (dex:post (format nil "~A/v1/oauth2/token"
+                          (generate-url t))
+                  :basic-auth `(,*client* . ,*secret*)
+                  :headers '(("Accept" . "application/json")
+                             ("Accept-Language" . "en_US"))
+                  :content '(("grant_type" . "client_credentials")))
+        (let ((token (parse-token *parse-as* (jojo:parse resp :as *parse-as*))))
+          (values 
+           (make-instance (determine-good-class status) :body (list token))
+           (setf *token* token))))
+      *token*))
 
 (defmethod expiredp (token)
   (error 'unbound-token))
