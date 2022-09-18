@@ -293,7 +293,9 @@
              (wrapped-dex-call (resp status)
                (apply fun url args)
                (make-instance (determine-good-class status)
-                              :body (jojo:parse resp :as *parse-as*))))))
+                              :body (typecase resp
+                                      (simple-vector nil)
+                                      (simple-string (jojo:parse resp :as *parse-as*))))))))
     (restart-case 
         (body req)
       (missing-token ()
