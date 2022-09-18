@@ -150,7 +150,7 @@
                                     :collect
                                     (if (stringp slot?)
                                         slot? 
-                                        (do-urlencode:urlencode
+                                        (quri:url-encode 
                                          (slot-value request slot?)))))))
           (lambda (request)
             (declare (ignore request))
@@ -170,7 +170,7 @@
                                               :collect
                                               (format nil "~A=~A"
                                                       (string-downcase (symbol-name slot))
-                                                      (do-urlencode:urlencode
+                                                      (quri:url-encode
                                                        (slot-value request slot)))))))
                         (if (string= str "?")
                             ""
@@ -272,7 +272,7 @@
 
 (defmethod generate-content ((req request-with-content))
   (list :content (funcall *json-encoder* (slot-value req 'content))))
-                          
+
 
 (defmethod generate-content ((req patch-r))
   (list :content (funcall *json-encoder* (slot-value req 'patch-request))))

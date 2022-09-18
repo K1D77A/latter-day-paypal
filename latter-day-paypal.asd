@@ -11,8 +11,8 @@
                #:str 
                #:jonathan
                #:ironclad
+               #:quri
                #:cl-tls
-               #:cl-json
                #:dexador
                #:cl-base64
                #:hunchentoot
