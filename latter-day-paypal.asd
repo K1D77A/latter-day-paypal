@@ -4,7 +4,7 @@
   :description "Paypal api wrapper."
   :author "K1D77A"
   :license  "MIT"
-  :version "0.0.2"
+  :version "0.0.3"
   :serial t
   :pathname "api"
   :depends-on (#:closer-mop
@@ -15,7 +15,8 @@
                #:cl-json
                #:dexador
                #:cl-base64
-               #:hunchentoot                             
+               #:hunchentoot
+               #:ningle
                #:do-urlencode
                #:local-time)
   :components ((:file "package")

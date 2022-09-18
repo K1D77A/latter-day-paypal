@@ -8,7 +8,7 @@
 (defun %get-rsa-public-key (cert-url)
   (cl-tls:x509-decode
    (cdar (cl-tls::parse-pem
-          (babel:octets-to-string (dex:get cert-url :use-connection-pool nil))))))
+          (babel:octets-to-string (dex:get cert-url))))))
 
 (defmethod %rsa-details ((key CL-TLS::X509V3-CERTIFICATE))
   (with-slots (cl-tls::tbs-certificate)
@@ -67,7 +67,10 @@
          :SHA256WITHRSA)
         (t (error "Unknown encryption algorithm. Please implement or inform maintainer."))))
 
-(defgeneric verify-paypal-webhook (webhook-id request raw-body))
+(defgeneric verify-paypal-webhook (webhook-id request raw-body)
+  (:documentation "Generic means of verifying a webhook from Paypal. Just a simple wrapper
+around #'verify-webhook which extracts the extracts the required information from the 
+headers."))
 
 (defmethod verify-paypal-webhook (webhook-id (request hunchentoot:request) raw-body)
   (let* ((headers (tbnl:headers-in request))
@@ -77,5 +80,14 @@
          (transmission-id (cdr (assoc :paypal-transmission-id headers)))
          (transmission-time (cdr (assoc :paypal-transmission-time headers))))
     (verify-webhook auth-algo cert-url transmission-sig transmission-id
-                    transmission-time webhook-id
-                    raw-body)))
+                    transmission-time webhook-id raw-body)))
+
+(defmethod verify-paypal-webhook (webhook-id (request lack.request:request) raw-body)
+  (let* ((headers (lack.request:request-headers request))
+         (auth-algo (%algo->key (gethash "paypal-auth-algo" headers)))
+         (transmission-sig(gethash "paypal-transmission-sig" headers))
+         (cert-url (gethash "paypal-cert-url" headers))
+         (transmission-id (gethash "paypal-transmission-id" headers))
+         (transmission-time (gethash "paypal-transmission-time" headers)))
+    (verify-webhook auth-algo cert-url transmission-sig transmission-id
+                    transmission-time webhook-id raw-body)))
