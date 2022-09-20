@@ -303,7 +303,6 @@
         (get-token)
         (body req)))))
 
-
 (defmethod print-object ((obj request) stream)
   (print-unreadable-object (obj stream :type t :identity t)
     (format stream "~A ~A~A"

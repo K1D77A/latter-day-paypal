@@ -1,3 +1,5 @@
+# No longer maintained please see https://github.com/K1D77A/lisp-pay
+
 # latter-day-paypal
 Right now this is just a thin wrapper over the paypal api.
 
